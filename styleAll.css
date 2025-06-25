@@ -92,20 +92,10 @@
 
     .products {
       display: flex;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       overflow-x: auto;
       gap: 1rem;
-      padding: 0 2rem 2rem;
-    }
-
-    .products::-webkit-scrollbar {
-      height: 6px;
-      
-    }
-
-    .products::-webkit-scrollbar-thumb {
-      background-color: #ccc;
-      border-radius: 4px;
+      padding: 3rem 4rem 2rem;
     }
 
     .product-card {
@@ -117,9 +107,9 @@
       flex-shrink: 0;
       padding: 1rem;
       text-align: center;
-      cursor: pointer;
     }
 
+    
     .product-card img {
       width: 100%;
       border-radius: 8px;
