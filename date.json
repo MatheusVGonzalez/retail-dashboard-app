@@ -1,0 +1,14 @@
+{
+  "id": "pc001",
+  "nome": "CoreTech Gamer X",
+  "cpu": "Intel i7-13700KF",
+  "gpu": "RTX 4070",
+  "ram": "32GB DDR5",
+  "armazenamento": "1TB SSD NVMe",
+  "preco": 8499.99,
+  "estoque": 5,
+  "reviews": [
+    {"nota": 5, "comentario": "Rápido e silencioso"},
+    {"nota": 4, "comentario": "Muito bom, mas esquenta"}
+  ]
+}
