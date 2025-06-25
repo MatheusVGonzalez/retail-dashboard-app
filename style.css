@@ -125,14 +125,21 @@
       border-radius: 8px;
     }
 
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
     .product-name {
       font-weight: 600;
       margin: 0.5rem 0;
+      text-decoration: none;
+      color: inherit;
     }
 
     .product-price {
       color: #1a73e8;
       font-weight: bold;
+      text-decoration: black;
     }
 
     .categories {
