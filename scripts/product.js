@@ -1,28 +1,88 @@
-const produtos = [
-  { nome: 'Quoted Tech Clarity Gaming Custom PC', preco: 1349.99, imagem: '/assets/gamer1.webp' },
-  { nome: 'ViprTech Reaper 3.0 Liquid-Cooled PC', preco: 2200.00, imagem: '/assets/vipr.webp' },
-  { nome: 'ASUS ROG G700 Gaming PC', preco: 2700.99, imagem: '/assets/asusrog.webp' },
-  { nome: 'UNIWAY Gaming PC Desktop', preco: 1649.99, imagem: '/assets/gamer2.webp' },
-  { nome: 'ASUS ROG G700 Gaming PC', preco: 5999.99, imagem: '/assets/rog.webp' },
-  { nome: 'Apple iMac 27"', preco: 1299.99, imagem: '/assets/imac.webp' },
-  { nome: 'Apple MacBook Pro 16-inch"', preco: 1000.00, imagem: '/assets/mac.webp' },
-  { nome: 'Lenovo Yoya Slim 7x14.5" OLED Copilot', preco: 1299.95, imagem: '/assets/lenovo.webp' },
-  { nome: 'Asus TUF Gaming F15 144hz', preco: 1349.99, imagem: '/assets/asus.webp' },
-  { nome: 'HP Omnibook 5 Flip 14', preco: 899.99, imagem: '/assets/hp.webp' },
-  { nome: 'HP 14" x360 Chromebook Plus "', preco: 499.00, imagem: '/assets/chromebook.webp' },
-];
-
 const params = new URLSearchParams(window.location.search);
-const id = params.get('id');
-console.log(id);
+const id = parseInt(params.get('id'), 10); // pega o ID da URL
 
-const produto = produtos[parseInt(id)]; 
-console.log(produto);
+fetch('http://localhost:3000/products')
+  .then(res => res.json())
+  .then(products => {
+    const produto = products[id];
+    if (!produto) {
+      console.error('Produto não encontrado');
+      return;
+    }
 
-const container = document.getElementById('product-details');
-container.innerHTML = `
-  <h1>${produto.nome}</h1>
-  <img src="${produto.imagem}" alt="${produto.nome}" />
-  <p>${produto.descricao}</p>
-  <p><strong>Preço:</strong> $${produto.preco.toFixed(2)}</p>
-`;
+    document.getElementById('product-name').textContent = produto.nome;
+    document.getElementById('product-image').src = produto.imagem;
+    document.getElementById('product-image').alt = produto.nome;
+    document.getElementById('product-description').textContent = produto.descricao || 'Sem descrição disponível.';
+    document.getElementById('product-price').textContent = `Preço: R$ ${produto.preco.toFixed(2)}`;
+
+    document.getElementById('add-to-cart').addEventListener('click', () => adicionarAoCarrinho(produto));
+
+    carregarAvaliacoes(id);
+  })
+  .catch(error => {
+    console.error('Erro ao carregar produto:', error);
+  });
+
+function adicionarAoCarrinho(produto) {
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  cart.push(produto);
+  localStorage.setItem('cart', JSON.stringify(cart));
+  alert('Produto adicionado ao carrinho!');
+}
+
+function carregarAvaliacoes(idProduto) {
+  fetch(`http://localhost:3000/reviews/${idProduto}`)
+    .then(res => res.json())
+    .then(reviews => {
+      const container = document.getElementById('reviews-container');
+      container.innerHTML = '';
+      if (reviews.length === 0) {
+        container.innerHTML = '<p>Seja o primeiro a avaliar!</p>';
+        return;
+      }
+
+      reviews.forEach(r => {
+        const review = document.createElement('div');
+        review.className = 'review';
+        review.innerHTML = `
+          <div class="stars">${'★'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)}</div>
+          <div class="comment">${r.comment}</div>
+        `;
+        container.appendChild(review);
+      });
+    })
+    .catch(err => console.error('Erro ao carregar avaliações:', err));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('review-form');
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const stars = parseInt(document.getElementById('stars').value);
+      const comment = document.getElementById('comment').value.trim();
+
+      if (!stars || !comment) {
+        alert('Preencha todos os campos');
+        return;
+      }
+
+      fetch('http://localhost:3000/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          productId: id,
+          stars,
+          comment
+        })
+      })
+        .then(res => res.json())
+        .then(() => {
+          form.reset();
+          carregarAvaliacoes(id);
+        })
+        .catch(err => console.error('Erro ao enviar avaliação:', err));
+    });
+  }
+});

@@ -22,6 +22,10 @@
   </div>
 
   <script>
+    if (!localStorage.getItem('user')) {
+    alert('You need to be logged in to access this page.');
+    window.location.href = 'login.html';
+  }
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const cartItemsEl = document.getElementById('cart-items');
     const cartTotalEl = document.getElementById('cart-total');
@@ -53,7 +57,15 @@
       renderCart();
     }
 
+
     renderCart();
+
+
+  function logout() {
+  localStorage.removeItem('user');
+  window.location.href = 'login.html';
+}
+
   </script>
 </body>
 </html>

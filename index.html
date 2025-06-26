@@ -24,6 +24,7 @@
     </div>
         <div class="user">
         <img src="assets/user.png" alt="User" />
+        <button onclick="logout()">Logout</button>
         </div>
     </div>
   </header>
@@ -64,5 +65,16 @@
       Accessories
     </div>
   </div>
+  <script>
+  if (!localStorage.getItem('user')) {
+    alert('You need to be logged in to access this page.');
+    window.location.href = 'login.html';
+  }
+
+  function logout() {
+  localStorage.removeItem('user');
+  window.location.href = 'login.html';
+}
+</script>
 </body>
 </html>

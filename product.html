@@ -3,15 +3,65 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ByteShop | Product</title>
   <link rel="stylesheet" href="styleProduct.css">
-  <title>Product Details | ByteShop</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
 </head>
-
 <body>
-  <div class="product-page">
-    <div id="product-details"></div>
+  <header>
+    <div class="logo">ByteShop</div>
+    <div class="header-actions">
+      <a href="index.html">Home</a>
+      <a href="cart.html">Cart</a>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <main class="product-container">
+    <div class="product-image-section">
+      <img id="product-image" alt="Product image">
+    </div>
+
+    <div class="product-info-section">
+      <h1 id="product-name"></h1>
+      <p id="product-description" class="description"></p>
+      <p id="product-price" class="price"></p>
+      <button id="add-to-cart">Add to Cart</button>
+    </div>
+  </main>
+
+  <section class="review-section">
+    <h2>Customer Reviews</h2>
+    <div id="reviews-container"></div>
+
+    <h3>Leave a Review</h3>
+    <form id="review-form">
+      <label for="stars">Rating:</label>
+      <select id="stars" required>
+        <option value="">Select</option>
+        <option value="5">★★★★★</option>
+        <option value="4">★★★★</option>
+        <option value="3">★★★</option>
+        <option value="2">★★</option>
+        <option value="1">★</option>
+      </select>
+
+      <textarea id="comment" rows="3" placeholder="Write your comment..." required></textarea>
+      <button type="submit">Submit Review</button>
+    </form>
+  </section>
+
   <script src="scripts/product.js"></script>
+  <script>
+    if (!localStorage.getItem('user')) {
+      alert('You need to be logged in to access this page.');
+      window.location.href = 'login.html';
+    }
+
+    function logout() {
+      localStorage.removeItem('user');
+      window.location.href = 'login.html';
+    }
+  </script>
 </body>
 </html>

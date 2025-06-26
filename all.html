@@ -24,6 +24,7 @@
         <div class="user">
         <img src="assets/user.png" alt="User" />
         </div>
+        <button onclick="logout()">Logout</button>
     </div>
   </header>
 
@@ -38,6 +39,11 @@
   <div class="products" id="product-list"></div>
 
   <script>
+  if (!localStorage.getItem('user')) {
+    alert('You need to be logged in to access this page.');
+    window.location.href = 'login.html';
+  }
+
     const produtos = [
       { nome: 'Quoted Tech Clarity Gaming Custom PC', preco: 1349.99, imagem: '/assets/gamer1.webp' },
       { nome: 'ViprTech Reaper 3.0 Liquid-Cooled PC', preco: 2200.00, imagem: '/assets/vipr.webp' },
@@ -65,6 +71,11 @@
         </div>
       `;
     });
+
+  function logout() {
+  localStorage.removeItem('user');
+  window.location.href = 'login.html';
+}
   </script>
 </body>
 </html>
