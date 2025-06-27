@@ -13,7 +13,7 @@ fetch('http://localhost:3000/products')
     document.getElementById('product-name').textContent = produto.nome;
     document.getElementById('product-image').src = produto.imagem;
     document.getElementById('product-image').alt = produto.nome;
-    document.getElementById('product-description').textContent = produto.descricao || 'Sem descrição disponível.';
+    document.getElementById('product-description').textContent = produto.descricao || 'No description.';
     document.getElementById('product-price').textContent = `Preço: R$ ${produto.preco.toFixed(2)}`;
 
     document.getElementById('add-to-cart').addEventListener('click', () => adicionarAoCarrinho(produto));
