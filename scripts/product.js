@@ -10,6 +10,9 @@ fetch('http://localhost:3000/products')
       return;
     }
 
+    produto.id = id;
+
+
     document.getElementById('product-name').textContent = produto.nome;
     document.getElementById('product-image').src = produto.imagem;
     document.getElementById('product-image').alt = produto.nome;

@@ -25,91 +25,91 @@
   </div>
 
   <script>
-    if (!localStorage.getItem('user')) {
+  if (!localStorage.getItem('user')) {
     alert('You need to be logged in to access this page.');
     window.location.href = 'login.html';
   }
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const cartItemsEl = document.getElementById('cart-items');
-    const cartTotalEl = document.getElementById('cart-total');
 
-    function renderCart() {
-      cartItemsEl.innerHTML = '';
-      let total = 0;
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const cartItemsEl = document.getElementById('cart-items');
+  const cartTotalEl = document.getElementById('cart-total');
+  const checkoutBtn = document.getElementById('checkout-btn');
 
-      cart.forEach((item, index) => {
-        total += item.preco;
-        cartItemsEl.innerHTML += `
-          <div class="cart-item">
-            <img src="${item.imagem}" alt="${item.nome}" />
-            <div class="item-info">
-              <div class="item-name">${item.nome}</div>
-              <div class="item-price">$ ${item.preco.toFixed(2)}</div>
-            </div>
-            <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+  function renderCart() {
+    cartItemsEl.innerHTML = '';
+    let total = 0;
+
+    cart.forEach((item, index) => {
+      total += item.preco;
+      cartItemsEl.innerHTML += `
+        <div class="cart-item">
+          <img src="${item.imagem}" alt="${item.nome}" />
+          <div class="item-info">
+            <div class="item-name">${item.nome}</div>
+            <div class="item-price">$ ${item.preco.toFixed(2)}</div>
           </div>
-        `;
-      });
+          <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+        </div>
+      `;
+    });
 
-      cartTotalEl.textContent = `Total: $ ${total.toFixed(2)}`;
-    }
-
-    function removeItem(index) {
-      cart.splice(index, 1);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      renderCart();
-    }
-
-
-    renderCart();
-
-
-  function logout() {
-  localStorage.removeItem('user');
-  window.location.href = 'login.html';
-}
-
-document.getElementById('checkout-btn').addEventListener('click', () => {
-  if (cart.length === 0) {
-    alert('Seu carrinho está vazio!');
-    return;
+    cartTotalEl.textContent = `Total: $ ${total.toFixed(2)}`;
   }
 
-  let erros = [];
+  function removeItem(index) {
+    cart.splice(index, 1);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    renderCart();
+  }
 
-  Promise.all(cart.map(produto => {
-    return fetch('http://localhost:3000/comprar', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    productId: produtoIndex,  // ou algum identificador real
-    quantidadeComprada: 1
-  })
-})
-
-
-    .then(res => res.json())
-    .then(data => {
-      if (!data.success) {
-        erros.push(data.error || 'Erro ao comprar ' + produto.nome);
-      }
-    });
-  }))
-  .then(() => {
-    if (erros.length > 0) {
-      alert('Alguns itens não foram comprados:\n' + erros.join('\n'));
-    } else {
-      alert('Compra realizada com sucesso!');
-      localStorage.removeItem('cart');
-      window.location.reload();
+  function checkout() {
+    if (cart.length === 0) {
+      alert('Your cart is empty!');
+      return;
     }
-  })
-  .catch(err => {
-    console.error('Erro ao finalizar compra:', err);
-    alert('Erro inesperado durante a compra.');
-  });
-});
 
-  </script>
+    const confirmation = confirm('Do you really want to complete the purchase?');
+    if (!confirmation) return;
+
+    let errors = [];
+
+    Promise.all(cart.map(product => {
+      return fetch('http://localhost:3000/comprar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nomeProduto: product.nome,
+          quantidadeComprada: 1
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (!data.success) {
+          errors.push(data.error || `Error purchasing ${product.nome}`);
+        }
+      });
+    }))
+    .then(() => {
+      if (errors.length > 0) {
+        alert('Some items could not be purchased:\n' + errors.join('\n'));
+      } else {
+        alert('Purchase completed successfully!');
+        localStorage.removeItem('cart');
+        renderCart();
+        checkoutBtn.disabled = true;
+        checkoutBtn.innerText = 'Purchase Completed';
+      }
+    })
+    .catch(err => {
+      console.error('Error during purchase:', err);
+      alert('Unexpected error during purchase.');
+    });
+  }
+
+  checkoutBtn.addEventListener('click', checkout);
+
+  renderCart();
+</script>
+
 </body>
 </html>
