@@ -7,6 +7,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styleCart.css" />
 </head>
+
+  <script src="checkout.js"></script>
 <body>
   <header>
     <div class="logo">
@@ -18,7 +20,8 @@
     <h1>Your Cart</h1>
     <div id="cart-items"></div>
     <div class="cart-total" id="cart-total"></div>
-    <button class="checkout-btn">Checkout</button>
+    <button class="checkout-btn" id="checkout-btn">Checkout</button>
+
   </div>
 
   <script>
@@ -65,6 +68,47 @@
   localStorage.removeItem('user');
   window.location.href = 'login.html';
 }
+
+document.getElementById('checkout-btn').addEventListener('click', () => {
+  if (cart.length === 0) {
+    alert('Seu carrinho está vazio!');
+    return;
+  }
+
+  let erros = [];
+
+  Promise.all(cart.map(produto => {
+    return fetch('http://localhost:3000/comprar', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    productId: produtoIndex,  // ou algum identificador real
+    quantidadeComprada: 1
+  })
+})
+
+
+    .then(res => res.json())
+    .then(data => {
+      if (!data.success) {
+        erros.push(data.error || 'Erro ao comprar ' + produto.nome);
+      }
+    });
+  }))
+  .then(() => {
+    if (erros.length > 0) {
+      alert('Alguns itens não foram comprados:\n' + erros.join('\n'));
+    } else {
+      alert('Compra realizada com sucesso!');
+      localStorage.removeItem('cart');
+      window.location.reload();
+    }
+  })
+  .catch(err => {
+    console.error('Erro ao finalizar compra:', err);
+    alert('Erro inesperado durante a compra.');
+  });
+});
 
   </script>
 </body>

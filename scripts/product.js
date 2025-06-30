@@ -14,7 +14,10 @@ fetch('http://localhost:3000/products')
     document.getElementById('product-image').src = produto.imagem;
     document.getElementById('product-image').alt = produto.nome;
     document.getElementById('product-description').textContent = produto.descricao || 'No description.';
-    document.getElementById('product-price').textContent = `Preço: R$ ${produto.preco.toFixed(2)}`;
+    document.getElementById('product-price').textContent = `Price: $ ${produto.preco.toFixed(2)}`;
+    document.getElementById('product-stock').textContent = `Remaining Items: ${produto.quantidade}`;
+
+
 
     document.getElementById('add-to-cart').addEventListener('click', () => adicionarAoCarrinho(produto));
 
@@ -29,6 +32,9 @@ function adicionarAoCarrinho(produto) {
   cart.push(produto);
   localStorage.setItem('cart', JSON.stringify(cart));
   alert('Produto adicionado ao carrinho!');
+produto.id = id; 
+cart.push(produto);
+
 }
 
 function carregarAvaliacoes(idProduto) {
