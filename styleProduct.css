@@ -349,3 +349,7 @@ header {
   color: #FFD700;
   margin-bottom: 8px;
 }
+
+#increaseBtn:hover {
+  background: #155fc0;
+}
