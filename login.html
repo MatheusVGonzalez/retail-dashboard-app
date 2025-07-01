@@ -39,27 +39,28 @@
     <p id="error-msg" style="color: red;"></p>
   </div>
 
-  <script>
-    const form = document.getElementById('login-form');
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
+ <script>
+  const form = document.getElementById('login-form');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
 
-      const response = await fetch('http://localhost:3000/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      });
-
-      const result = await response.json();
-      if (result.success) {
-        localStorage.setItem('user', username);
-        window.location.href = 'index.html';
-      } else {
-        document.getElementById('error-msg').innerText = result.message;
-      }
+    const response = await fetch('http://localhost:3000/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
     });
-  </script>
+
+    const result = await response.json();
+    if (result.success) {
+      // Salva username e role corretamente!
+      localStorage.setItem('user', JSON.stringify({ username, role: result.role }));
+      window.location.href = 'index.html';
+    } else {
+      document.getElementById('error-msg').innerText = result.message;
+    }
+  });
+</script>
 </body>
 </html>

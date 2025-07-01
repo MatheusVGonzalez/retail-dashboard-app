@@ -174,3 +174,94 @@
         width: 100%;
       }
     }
+
+            .main-footer {
+      background: #18191b;
+      color: #fff;
+      padding: 2.5rem 1rem 1.5rem 1rem;
+      font-size: 1rem;
+      margin-top: 3rem;
+    }
+    .footer-columns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2.5rem;
+      max-width: 1200px;
+      margin: auto;
+      justify-content: space-between;
+    }
+    .footer-columns > div {
+      min-width: 220px;
+      flex: 1 1 220px;
+    }
+    .footer-title {
+      color: #e53935;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      margin-top: 1.2rem;
+      letter-spacing: 1px;
+    }
+    .footer-columns ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 0.8rem 0;
+    }
+    .footer-columns li {
+      margin-bottom: 0.3rem;
+      color: #eee;
+      font-size: 0.97rem;
+    }
+    .newsletter-form {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .newsletter-form input {
+      flex: 1;
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: none;
+      font-size: 1rem;
+    }
+    .newsletter-form button {
+      background: #e53935;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 0 1rem;
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .newsletter-form button:hover {
+      background: #b71c1c;
+    }
+    .footer-social a img {
+      width: 28px;
+      height: 28px;
+      margin-right: 0.5rem;
+      filter: brightness(0) invert(1);
+      transition: filter 0.2s;
+    }
+    .footer-social a img:hover {
+      filter: brightness(0.7) invert(0.7) sepia(1) hue-rotate(-30deg) saturate(4);
+    }
+    .footer-payments img {
+      height: 32px;
+      margin: 0.3rem 0.5rem 0.3rem 0;
+      background: #fff;
+      border-radius: 6px;
+      padding: 2px 6px;
+    }
+    .footer-apps img {
+      margin-right: 0.5rem;
+    }
+    @media (max-width: 900px) {
+      .footer-columns {
+        flex-direction: column;
+        gap: 2rem;
+      }
+      .footer-columns > div {
+        min-width: 0;
+      }
+    }
