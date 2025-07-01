@@ -343,3 +343,9 @@ header {
         width: 100%;
       }
     }
+
+    .product-rating {
+  font-size: 1.2em;
+  color: #FFD700;
+  margin-bottom: 8px;
+}
