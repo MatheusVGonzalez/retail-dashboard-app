@@ -155,7 +155,6 @@ function logout() {
   window.location.href = 'login.html';
 }
 
-// Mostra o dashboard-icon só para admin
 document.addEventListener('DOMContentLoaded', () => {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const dashboardIcon = document.getElementById('dashboard-icon');

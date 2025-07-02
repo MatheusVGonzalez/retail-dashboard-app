@@ -1,20 +1,20 @@
 let products = [];
-let sales = {}; // {productId: count}
+let sales = {}; 
 let reviews = [];
 
 function fetchAll() {
   return Promise.all([
     fetch('http://localhost:3000/products').then(r => r.json()),
-    fetch('http://localhost:3000/reviews/0').then(r => r.json()), // We'll fetch all reviews below
+    fetch('http://localhost:3000/reviews/0').then(r => r.json()), 
   ]).then(([prods]) => {
     products = prods;
-    // Fetch all reviews for all products
+
     return Promise.all(products.map(p =>
       fetch(`http://localhost:3000/reviews/${p.id}`).then(r => r.json())
     ));
   }).then(allReviews => {
     reviews = allReviews;
-    // Simulate sales: count of reviews as sales (or use your own sales data)
+
     sales = {};
     products.forEach((p, i) => sales[p.id] = reviews[i].length);
     renderCharts();
@@ -23,7 +23,6 @@ function fetchAll() {
 }
 
 function renderCharts() {
-  // Stock Chart
   const stockCtx = document.getElementById('stockChart').getContext('2d');
   new Chart(stockCtx, {
     type: 'bar',
@@ -37,7 +36,6 @@ function renderCharts() {
     }
   });
 
-  // Sales Chart
   const salesCtx = document.getElementById('salesChart').getContext('2d');
   new Chart(salesCtx, {
     type: 'bar',
@@ -51,7 +49,6 @@ function renderCharts() {
     }
   });
 
-  // Review Sentiment Chart
   const keywordsPositive = /great|good|excellent|amazing|love|perfect|awesome|best|like|great/i;
   const keywordsNegative = /bad|disappoint|broken|poor|worst|hate|problem|rate|terrible/i;
   let positive = 0, negative = 0, neutral = 0;
@@ -108,7 +105,7 @@ document.getElementById('increaseBtn').onclick = function() {
       if (res && res.ok) {
         msgDiv.textContent = 'Stock increased!';
         msgDiv.style.color = '#43a047';
-        // Atualiza os gráficos sem reload
+
         fetchAll();
       }
     });
